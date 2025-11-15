@@ -1,0 +1,201 @@
+/* =======================================
+    STYLE CHUNG (Có thể áp dụng cho cả TeacherList và StudentList)
+    ======================================= */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+.teacher-page-wrapper {
+    padding-top: 80px; /* Khoảng cách từ Navbar */
+    padding-bottom: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Sử dụng cho cả TeacherList và StudentList */
+.teacher-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 25px;
+    padding: 20px;
+    max-width: 1200px; 
+    width: 100%;
+}
+
+/* =======================================
+    THẺ DANH SÁCH (Card)
+    ======================================= */
+
+.teacher-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    /* Transition cho sự thay đổi kích thước/vị trí trong grid */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, grid-column 0.4s ease; 
+
+    display: flex; 
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 350px; 
+}
+
+.teacher-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.teacher-card.selected {
+    grid-column: span 2; /* Chiếm 2 cột khi được chọn */
+    box-shadow: 0 8px 25px rgba(40, 123, 255, 0.4);
+    transform: scale(1.01); 
+}
+
+/* Khu vực ảnh */
+.teacher-card .teacher-image-area {
+    position: relative;
+    width: 100%; 
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: width 0.4s ease; 
+}
+
+.teacher-card .teacher-image-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Lớp phủ tên */
+.teacher-card .teacher-name-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    color: white;
+    padding: 20px 15px 10px;
+    text-align: left;
+    transition: background 0.4s ease, padding 0.4s ease;
+}
+
+.teacher-card .teacher-name-overlay h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+.teacher-card .teacher-name-overlay .subject-brief {
+    margin: 3px 0 0 0;
+    font-size: 15px;
+    color: #ccc;
+    font-weight: 400;
+    transition: opacity 0.3s ease;
+}
+
+/* --- PHẦN CHI TIẾT (Detail Area) --- */
+.teacher-card .teacher-detail-area {
+    width: 0; /* Ẩn đi ban đầu */
+    opacity: 0;
+    overflow: hidden;
+    transition: width 0.4s ease, opacity 0.3s ease 0.2s; 
+    background-color: #fcfcfc;
+    flex-shrink: 0;
+    border-left: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* KHI ĐƯỢC CHỌN */
+.teacher-card.selected .teacher-image-area {
+    width: 35%; /* Ảnh chỉ chiếm 35% */
+}
+.teacher-card.selected .teacher-detail-area {
+    width: 65%; /* Chi tiết chiếm 65% còn lại */
+    opacity: 1;
+    padding: 20px 0; 
+    overflow-y: auto; 
+}
+.teacher-card.selected .teacher-name-overlay {
+    background: #287bff; 
+    padding: 15px;
+}
+.teacher-card.selected .teacher-name-overlay .subject-brief {
+    opacity: 0;
+}
+
+/* Style cho nội dung chi tiết */
+.detail-content-wrapper {
+    padding: 0 30px; 
+}
+.detail-subject {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #287bff;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.9em;
+}
+
+.detail-row strong {
+    color: #666;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.detail-row span {
+    text-align: right;
+    color: #333;
+    font-weight: 600;
+}
+
+/* --- Responsive cho màn hình nhỏ hơn --- */
+@media (max-width: 992px) {
+    .teacher-container {
+        grid-template-columns: repeat(2, 1fr); 
+        max-width: 700px;
+    }
+    .teacher-card.selected {
+        grid-column: span 2; 
+        flex-direction: column; 
+        min-height: auto;
+    }
+    .teacher-card.selected .teacher-image-area {
+        width: 100%; 
+        height: 300px; 
+        border-radius: 12px 12px 0 0;
+    }
+    .teacher-card.selected .teacher-detail-area {
+        width: 100%; 
+        opacity: 1;
+        padding: 20px;
+        border-top: 1px solid #eee;
+        border-left: none;
+        border-radius: 0 0 12px 12px;
+    }
+    .detail-content-wrapper {
+        padding: 0;
+    }
+}
+@media (max-width: 576px) {
+    .teacher-container {
+        grid-template-columns: 1fr; 
+    }
+    .teacher-card.selected {
+        grid-column: span 1;
+    }
+}

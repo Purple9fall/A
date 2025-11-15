@@ -1,0 +1,149 @@
+/* Nền toàn trang với background image giống LoginPage */
+.register-wrapper {
+  height: 120vh;
+  display: flex;
+  flex-direction: column; /* xếp tiêu đề và card dọc */
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+
+  background-image: url("../assets/LoginBG.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* Overlay mờ */
+.register-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.05);
+  z-index: 0;
+}
+
+/* Tiêu đề lớn nằm trên background */
+.register-wrapper .main-title {
+  position: relative;
+  z-index: 1;
+  font-size: 60px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 100px;
+  max-width: 900px;        /* 🔹 Giới hạn chiều ngang tối đa */
+  margin-left: auto;       /* 🔹 Căn giữa ngang */
+  margin-right: auto;      /* 🔹 Căn giữa ngang */
+  display: inline-block;
+  white-space: normal;
+
+  /* Gradient chữ */
+  background: linear-gradient(90deg, #ffb330, #fffcce);
+  -webkit-background-clip: text;
+  background-clip: text;        /* thêm dòng này */
+  -webkit-text-fill-color: transparent;
+  color: transparent;           /* để gradient hiển thị */
+}
+
+/* Card đăng ký */
+.register-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.8); /* trong suốt */
+  backdrop-filter: blur(10px);
+  width: 400px;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.01);
+  text-align: center;
+}
+
+/* Icon trên card */
+.card-icon {
+  font-size: 60px;
+  color: #28a745; /* xanh lá cho khác login */
+  margin-bottom: 20px;
+}
+
+/* Form */
+.register-form {
+  text-align: left;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #444;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.input-group input:focus {
+  border-color: #28a745;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field .toggle {
+  position: absolute;
+  right: 10px;
+  top: 9px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Nút đăng ký */
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745; /* xanh lá */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.register-btn:hover {
+  background-color: #1e7e34;
+}
+
+/* Chú thích dưới form */
+.note {
+  text-align: center;
+  margin-top: 15px;
+  color: #555;
+  font-size: 13px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}

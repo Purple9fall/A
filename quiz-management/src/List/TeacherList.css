@@ -1,0 +1,217 @@
+/* Đảm bảo body có margin và padding bằng 0 nếu chưa có */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5; /* Nền nhẹ nhàng cho toàn trang */
+}
+
+/* Thêm style cho Navbar nếu bạn chưa có, hoặc đảm bảo nó fixed/sticky */
+/* Ví dụ:
+.navbar-container { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    background-color: #287bff; 
+    color: white; 
+    padding: 15px 20px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+*/
+
+.teacher-page-content {
+    display: flex; /* Sử dụng flexbox để các phần tử con nằm cạnh nhau */
+    padding-top: 80px; /* Khoảng cách từ Navbar */
+    position: relative; /* Quan trọng cho panel tuyệt đối */
+    min-height: calc(100vh - 80px); /* Đảm bảo đủ chiều cao */
+    box-sizing: border-box;
+}
+
+.teacher-container {
+    flex-grow: 1; /* Cho phép teacher-container mở rộng */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Sẽ tự động điều chỉnh số cột */
+    gap: 30px;
+    padding: 40px;
+    max-width: 1200px; /* Giới hạn chiều rộng tối đa */
+    margin: 0 auto; /* Căn giữa */
+    position: relative; /* Cho z-index nếu cần */
+    z-index: 1; /* Đảm bảo nó nằm trên panel khi panel đóng */
+}
+
+.teacher-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    text-align: center;
+    padding: 0; /* Loại bỏ padding ở đây vì ảnh sẽ chiếm toàn bộ chiều rộng */
+    overflow: hidden; /* Quan trọng để bo góc ảnh */
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Sắp xếp ảnh và text theo chiều dọc */
+    justify-content: space-between; /* Đẩy nội dung lên và xuống */
+}
+
+.teacher-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.teacher-card.selected {
+    border: 2px solid #287bff; /* Viền xanh khi được chọn */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.teacher-image-wrapper {
+    width: 100%;
+    height: 300px; /* Chiều cao cố định cho ảnh khổ dọc */
+    overflow: hidden; /* Đảm bảo ảnh không tràn ra ngoài */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.teacher-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo ảnh được cover đầy đủ và cắt nếu cần */
+    display: block; /* Loại bỏ khoảng trắng dưới ảnh */
+    border-radius: 0; /* Đảm bảo ảnh không bị bo tròn 50% */
+}
+
+.teacher-info-brief {
+    padding: 15px 10px; /* Padding cho phần text */
+    background-color: #f9f9f9;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.teacher-card h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 600;
+}
+
+.teacher-card p {
+    font-size: 15px;
+    color: #555;
+    font-weight: 400;
+}
+
+/* --- Panel chi tiết giáo viên --- */
+.teacher-detail-panel {
+    position: fixed; /* Cố định vị trí panel */
+    top: 0;
+    right: 0; /* Ban đầu nằm bên phải màn hình */
+    width: 0; /* Chiều rộng ban đầu bằng 0 */
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden; /* Ẩn nội dung tràn ra ngoài */
+    transition: width 0.4s ease-in-out; /* Hiệu ứng trượt */
+    z-index: 1010; /* Cao hơn Navbar */
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px; /* Để tránh Navbar */
+}
+
+.teacher-detail-panel.open {
+    width: 400px; /* Chiều rộng khi panel mở ra */
+    /* Có thể điều chỉnh width này tùy theo kích thước mong muốn */
+}
+
+.close-panel-btn {
+    position: absolute;
+    top: 90px; /* Vị trí nút đóng */
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+    z-index: 1020;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.close-panel-btn:hover {
+    background-color: #eee;
+}
+
+.detail-content {
+    padding: 20px 30px; /* Padding cho nội dung chi tiết */
+    flex-grow: 1;
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
+}
+
+.detail-content h2 {
+    font-size: 28px;
+    color: #287bff;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.detail-row {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.detail-row strong {
+    display: block; /* Đưa nhãn lên dòng riêng */
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 3px;
+    font-size: 14px;
+}
+
+.detail-row span {
+    font-weight: 600;
+    color: #000;
+}
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+    .teacher-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .teacher-image-wrapper {
+        height: 250px;
+    }
+
+    .teacher-detail-panel.open {
+        width: 100%; /* Panel chiếm toàn bộ chiều rộng trên mobile */
+    }
+
+    .close-panel-btn {
+        top: 20px; /* Điều chỉnh vị trí nút đóng trên mobile */
+        right: 20px;
+        background-color: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        color: #287bff;
+        font-size: 25px;
+        padding: 0;
+    }
+
+    .detail-content {
+        padding: 80px 20px 20px 20px; /* Tăng padding trên để tránh nút đóng */
+    }
+    
+    .teacher-page-content {
+        padding-top: 60px; /* Giảm padding nếu Navbar nhỏ hơn trên mobile */
+    }
+}

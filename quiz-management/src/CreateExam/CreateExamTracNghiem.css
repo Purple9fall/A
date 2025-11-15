@@ -1,0 +1,289 @@
+/* ======================================= */
+/* === Cải tiến Form Thông tin (STEP 1) === */
+/* ======================================= */
+
+.exam-create-page {
+    /* Đảm bảo trang có đủ chiều cao nếu Navbar không chiếm toàn bộ */
+    min-height: 100vh;
+    background-color: #f8f9fa; /* Nền trang nhẹ nhàng */
+}
+
+.exam-create-container {
+    max-width: 800px;
+    /* THAY ĐỔI: Giảm margin-top để kéo khung xuống 
+       Ví dụ: 30px (hoặc 40px) là đủ, giữ margin-left/right là auto */
+    margin: 120px auto; 
+    
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); 
+    padding: 30px 40px; 
+}
+
+.exam-bank-title {
+    /* Điều chỉnh tiêu đề */
+    text-align: left; /* Đặt lại về căn trái */
+    margin-bottom: 25px;
+    color: #007bff; /* Màu chủ đạo */
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 15px;
+    font-weight: 600;
+}
+
+/* INPUTS VÀ LABELS */
+.exam-form .form-group {
+    margin-bottom: 25px; /* Tăng khoảng cách */
+    text-align: left;
+}
+
+.exam-form label {
+    display: block;
+    font-weight: 500; /* Giảm độ đậm nhẹ */
+    margin-bottom: 8px;
+    color: #343a40;
+    font-size: 15px;
+}
+
+.exam-form input[type="text"],
+.exam-form input[type="number"],
+.exam-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px; /* Tăng độ cong */
+    font-size: 15px;
+    box-sizing: border-box; /* Quan trọng để padding không làm hỏng width */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.exam-form input:focus,
+.exam-form textarea:focus {
+    border-color: #007bff; /* Màu focus chủ đạo */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Bố cục 1/2 cho Thời gian và Số lượng câu hỏi */
+.half-group {
+    display: flex;
+    gap: 20px;
+}
+.half-group > div {
+    flex: 1;
+}
+.half-group input {
+    margin-bottom: 0; /* Loại bỏ margin-bottom mặc định khi dùng flex */
+}
+
+
+/* --- Tags UI (Pill/Badge) --- */
+
+.tags-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 5px 10px; /* Padding nhẹ hơn */
+    min-height: 48px;
+}
+
+.tags-input-container input {
+    flex-grow: 1;
+    border: none;
+    padding: 5px 0;
+    margin: 5px 0;
+    min-width: 150px;
+}
+
+.tags-input-container input:focus {
+    box-shadow: none;
+}
+
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e3f2fd; /* Màu nền nhẹ nhàng từ Material Design Blue */
+    color: #007bff;
+    padding: 5px 10px;
+    border-radius: 16px;
+    margin-right: 8px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.tag-pill button {
+    background: none;
+    border: none;
+    color: #007bff;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+}
+
+/* --- Buttons Cải tiến --- */
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end; /* Đẩy về bên phải (default cho STEP 1) */
+    gap: 15px;
+    margin-top: 30px;
+}
+.form-buttons.final-buttons {
+    justify-content: space-between; /* Cho STEP 2 */
+}
+
+.exam-detail-btn { /* Nút Chính (Primary) */
+    background-color: #007bff; /* Màu xanh chủ đạo */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.exam-detail-btn:hover {
+    background-color: #0056b3;
+}
+
+.exam-cancel-btn.outline { /* Nút Phụ (Secondary/Outline) */
+    background: none;
+    color: #6c757d;
+    border: 2px solid #ced4da;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+.exam-cancel-btn.outline:hover {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+/* ======================================= */
+/* === Trình chỉnh sửa Câu hỏi (STEP 2) === */
+/* ======================================= */
+
+.question-editor .exam-summary {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-size: 15px;
+    color: #555;
+    border-left: 5px solid #007bff;
+}
+
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Khoảng cách giữa các Question Card */
+}
+
+.question-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ cho từng card */
+    transition: box-shadow 0.2s;
+}
+.question-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* Hiệu ứng hover */
+}
+
+.card-header .question-label {
+    display: block;
+    margin-bottom: 0;
+}
+
+.card-header textarea {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    resize: vertical;
+    width: 100%;
+    min-height: 80px;
+    margin-bottom: 10px;
+}
+
+.card-body {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.answer-option input[type="radio"] {
+    margin-right: 15px;
+    margin-bottom: 0;
+    width: auto;
+    transform: scale(1.1); /* Phóng to radio button */
+    cursor: pointer;
+    border: 1px solid #ced4da; /* Fix border cho radio */
+}
+
+.answer-option input[type="text"] {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+.card-footer {
+    text-align: right;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.delete-q-btn {
+    background: none;
+    border: none;
+    color: #dc3545; /* Màu đỏ cho xóa */
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.delete-q-btn:hover {
+    background-color: #f8d7da;
+    color: #c82333;
+}
+
+.add-q-btn {
+    width: 100%;
+    background-color: #e2f0ff; /* Màu nền nhẹ cho Thêm */
+    color: #007bff;
+    border: 1px dashed #007bff;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.add-q-btn:hover {
+    background-color: #c0e3e7;
+    border-color: #0056b3;
+    color: #0056b3;
+}

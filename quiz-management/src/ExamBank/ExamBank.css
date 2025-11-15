@@ -1,0 +1,132 @@
+.exam-bank-page {
+  background: #f5f7fb;
+  min-height: 100vh;
+  padding-top: 80px; /* chừa chỗ cho navbar fixed */
+  font-family: "Segoe UI", sans-serif;
+}
+
+.exam-bank-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.exam-bank-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1f2b50;
+  margin-bottom: 18px;
+}
+
+.exam-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+/* Card */
+.exam-card {
+  background: #fff;
+  border: 1px solid #e6e8ef;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(31, 43, 80, 0.06);
+  display: flex;
+  flex-direction: column;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+
+.exam-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(31, 43, 80, 0.12);
+}
+
+.exam-card-body {
+  padding: 18px 18px 8px;
+}
+
+.exam-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f2b50;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+/* meta line */
+.exam-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5a6685;
+  font-size: 14px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.exam-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  opacity: .95;
+}
+
+.exam-sep {
+  color: #c8cfdb;
+}
+
+.exam-sub {
+  color: #6a7593;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* tags */
+.exam-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.exam-tag {
+  background: #eaf2ff;
+  color: #3c69c9;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #d6e4ff;
+}
+
+/* footer button */
+.exam-card-footer {
+  padding: 12px 18px 16px;
+}
+
+.exam-detail-btn {
+  width: 100%;
+  border: 1.5px solid #3c69c9;
+  color: #3c69c9;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.exam-detail-btn:hover {
+  background: #f0f6ff;
+  box-shadow: 0 4px 10px rgba(60,105,201,.18);
+}
+
+/* responsive */
+@media (max-width: 1200px) {
+  .exam-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 900px) {
+  .exam-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .exam-grid { grid-template-columns: 1fr; }
+}

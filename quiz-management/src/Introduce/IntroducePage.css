@@ -1,0 +1,265 @@
+/* .introduce-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.introduce-wrapper button {
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: #00c3ff;
+  color: white;
+}
+
+.introduce-wrapper button:hover {
+  background-color: #388E3C;
+} */
+
+
+/* =======================================
+   GLOBAL SETUP & SECTION
+   ======================================= */
+
+.introduce-section {
+    background-color: #f0f4f9; /* Màu nền trắng xám nhẹ */
+    min-height: 100vh;
+    padding: 60px 20px 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* =======================================
+   HEADER CONTENT
+   ======================================= */
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 60px;
+}
+
+.main-title {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #0b3d91; /* Xanh đậm */
+    max-width: 600px;
+}
+
+.subtitle {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+/* =======================================
+   CARDS CONTAINER
+   ======================================= */
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+/* =======================================
+   FEATURE CARD STYLES & GRADIENTS
+   ======================================= */
+
+.card-item {
+    padding: 30px;
+    border-radius: 20px;
+    color: white;
+    height: 400px; 
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out; /* Hiệu ứng hover */
+}
+
+/* HIỆU ỨNG HOVER */
+.card-item:hover {
+    transform: translateY(-10px); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); 
+}
+
+.card-title {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    transition: transform 0.4s ease-out;
+}
+
+.card-item:hover .card-title {
+    transform: translateY(-5px); 
+}
+
+.card-description {
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 90%;
+}
+
+.card-arrow-icon {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.4s;
+}
+
+.arrow {
+    font-size: 24px;
+    font-weight: bold;
+    transform: rotate(90deg); 
+    display: block;
+    transition: transform 0.4s ease-out;
+}
+
+.card-item:hover .arrow {
+    transform: rotate(0deg); /* Xoay về vị trí mũi tên lên */
+}
+
+/* GRADIENTS COLORS */
+.blue-gradient {
+    background: linear-gradient(140deg, #2196F3 0%, #0d47a1 100%);
+}
+
+.dark-blue-gradient {
+    background: linear-gradient(140deg, #1976D2 0%, #001a54 100%);
+}
+
+.green-gradient {
+    background: linear-gradient(140deg, #4CAF50 0%, #1b5e20 100%);
+}
+
+.yellow-gradient {
+    background: linear-gradient(140deg, #FFC107 0%, #FF9800 100%);
+}
+
+/* =======================================
+   CSS ANIMATIONS (HIỆU ỨNG KHI XUẤT HIỆN)
+   ======================================= */
+
+/* 1. Tiêu đề chính: Slide-in-Top */
+@keyframes slideInTop {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.slide-in-top {
+    animation: slideInTop 1s ease-out forwards;
+}
+
+/* 2. Mô tả: Fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.fade-in {
+    animation: fadeIn 1.5s ease-out 0.5s forwards; 
+    opacity: 0; 
+}
+
+/* 3. Thẻ tính năng: Slide-up */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.card-wrapper {
+    opacity: 0; 
+    animation: slideUp 0.8s ease-out forwards;
+}
+
+/* Trễ animation cho từng thẻ */
+.delay-0 { animation-delay: 1s; }
+.delay-1 { animation-delay: 1.2s; }
+.delay-2 { animation-delay: 1.4s; }
+.delay-3 { animation-delay: 1.6s; }
+
+/* =======================================
+   QUAY LẠI BUTTON
+   ======================================= */
+.back-button-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.btn-back {
+    background: #0b3d91;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.btn-back:hover {
+    background: #1976D2;
+}
+
+/* =======================================
+   RESPONSIVE
+   ======================================= */
+
+@media (max-width: 1024px) {
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .header-content {
+        flex-direction: column;
+    }
+    .main-title {
+        font-size: 45px;
+        margin-bottom: 20px;
+    }
+    .subtitle {
+        margin-top: 10px;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+    .main-title {
+        font-size: 36px;
+    }
+}
