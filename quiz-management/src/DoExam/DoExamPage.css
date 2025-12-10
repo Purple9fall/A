@@ -1,0 +1,165 @@
+.do-exam-page {
+  padding-top: 80px;
+  width: 100%;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.do-exam-container {
+  width: 75%;
+  margin: auto;
+}
+
+.exam-header {
+  margin-bottom: 20px;
+}
+
+.exam-title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.exam-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #444;
+  font-size: 16px;
+}
+
+.question-list {
+  margin-top: 20px;
+}
+
+.question-card {
+  background: white;
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.question-text {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-item {
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.choice-item input {
+  transform: scale(1.2);
+}
+
+.submit-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  padding: 10px 25px;
+  font-size: 18px;
+  background: #4b7bec;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background: #3867d6;
+}
+
+
+
+/*Hiệu ứng đồng hồ đếm ngược - TRẠNG THÁI BÌNH THƯỜNG*/
+.timer-floating {
+  /* Vị trí & Lớp nền */
+  position: fixed;
+  top: 80px; /* Tăng khoảng cách so với lề trên */
+  right: 15px; /* Tăng khoảng cách so với lề phải */
+  
+  /* Màu sắc và Hiệu ứng chuyển màu */
+  background: linear-gradient(135deg, #FF6B6B 0%, #FFAD6A 100%); /* Gradient ấm áp */
+  color: #FFFFFF; /* Chữ trắng nổi bật trên nền màu */
+  
+  /* Kích thước & Hình dạng */
+  padding: 15px 25px; /* Tăng padding để đồng hồ trông lớn hơn */
+  border-radius: 50px; /* Bo tròn mạnh hơn (hình viên thuốc) */
+  
+  /* Chữ */
+  font-size: 24px; /* Kích thước chữ lớn hơn */
+  font-weight: 900; /* Rất đậm */
+  font-family: 'Arial', sans-serif; /* Chọn font hiện đại hơn */
+  text-transform: uppercase; /* Chữ in hoa (tùy chọn) */
+
+  /* Bóng đổ 3D và Nổi bật */
+  box-shadow: 
+    0 8px 15px rgba(255, 107, 107, 0.4), /* Bóng đổ màu chính */
+    0 2px 4px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ ở trên */
+  
+  /* Hiệu ứng Động và Chuyển tiếp */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng mượt mà */
+  cursor: pointer; /* Cho biết có thể tương tác */
+  
+  z-index: 9999;
+  
+  /* Áp dụng hiệu ứng nhấp nháy nhẹ ban đầu */
+  animation: pulse 2s infinite; 
+}
+
+/* Hiệu ứng khi di chuột (Hover) */
+.timer-floating:hover {
+  transform: translateY(-3px) scale(1.05); /* Nâng lên một chút và phóng to nhẹ */
+  box-shadow: 
+    0 12px 20px rgba(255, 107, 107, 0.6), /* Bóng đổ mạnh hơn khi hover */
+    0 4px 6px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #FFAD6A 0%, #FF6B6B 100%); /* Đảo màu gradient nhẹ */
+}
+
+/* @keyframes cho hiệu ứng nhấp nháy nhẹ (trạng thái bình thường) */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+}
+
+/* ======================================================= */
+/* 🚨 PHẦN CSS BÁO ĐỘNG (DƯỚI 30 GIÂY) 🚨 */
+/* ======================================================= */
+
+.timer-urgent {
+  /* Màu khẩn cấp: Đỏ rực và vàng neon */
+  background: linear-gradient(135deg, #FF0000 0%, #FFA500 100%); /* Gradient đỏ cam rực rỡ */
+  color: #FFFF00; /* Chữ màu vàng neon để tăng độ tương phản */
+  
+  /* Bóng đổ phát sáng mạnh hơn */
+  box-shadow: 
+    0 0 15px rgba(255, 0, 0, 0.8), /* Hiệu ứng phát sáng đỏ */
+    0 0 5px rgba(255, 0, 0, 0.5);
+    
+  /* Hiệu ứng nhấp nháy khẩn cấp */
+  animation: urgent-pulse 0.5s infinite alternate; /* Kích hoạt animation mạnh hơn */
+}
+
+/* Định nghĩa hiệu ứng nhấp nháy khẩn cấp */
+@keyframes urgent-pulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); 
+  }
+  100% { 
+    transform: scale(1.05); /* Phóng to/thu nhỏ nhẹ */
+    box-shadow: 0 0 20px rgba(255, 0, 0, 1); 
+  }
+}
