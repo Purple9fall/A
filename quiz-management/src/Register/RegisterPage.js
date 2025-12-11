@@ -1,30 +1,69 @@
 import React, { useState } from "react";
-// import { Link } from "react-router-dom";
 import "./RegisterPage.css";
 import { FaUserCircle } from "react-icons/fa";
 
 function RegisterPage(props) {
   const [fullname, setFullname] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // email hoặc username
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegister = (e) => {
+  // 🔹 STATE MỚI
+  const [role, setRole] = useState("student"); // mặc định sinh viên
+  const [roleCode, setRoleCode] = useState("");
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    if (!fullname || !email || !password || !confirmPassword)
-      alert("Vui lòng nhập đầy đủ thông tin!");
-    else if (password !== confirmPassword)
-      alert("Mật khẩu và nhập lại mật khẩu không khớp!");
-    else{ 
-        alert(`Đăng ký thành công: ${fullname}`);
-        if (props.onSwitch) props.onSwitch();
-    } // 🔹 Chuyển về trang đăng nhập
+
+    if (!fullname || !username || !password || !confirmPassword) {
+      return alert("Vui lòng nhập đầy đủ thông tin!");
+    }
+
+    if (password !== confirmPassword) {
+      return alert("Mật khẩu và nhập lại mật khẩu không khớp!");
+    }
+
+    // Kiểm tra mã vai trò nếu là giảng viên
+    if (role === "teacher" && roleCode.trim() === "") {
+      return alert("Vui lòng nhập mã vai trò giảng viên!");
+    }
+
+    // Nếu là sinh viên mà cố nhập mã thì chặn
+    if (role === "student" && roleCode.trim() !== "") {
+      return alert("Sinh viên không cần nhập mã vai trò!");
+    }
+
+    try {
+      // 🔹 Gọi API backend
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullname,
+          username,
+          password,
+          role_name: role, // "teacher" hoặc "student"
+          invite_code_input: role === "teacher" ? roleCode : null,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return alert(data.message); // backend trả lỗi nếu mã vai trò sai hoặc username tồn tại
+      }
+
+      alert(data.message); // đăng ký thành công
+      if (props.onSwitch) props.onSwitch(); // chuyển sang login
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi server, vui lòng thử lại");
+    }
   };
 
   return (
     <div className="register-wrapper">
-      {/* Tiêu đề chính */}
       <h1 className="main-title">HỆ THỐNG THI TRẮC NGHIỆM TRỰC TUYẾN</h1>
 
       <div className="register-card">
@@ -44,14 +83,36 @@ function RegisterPage(props) {
           </div>
 
           <div className="input-group">
-            <label>Email</label>
+            <label>Email / Username</label>
             <input
-              type="email"
-              placeholder="Nhập email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Nhập email hoặc username..."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
+
+          {/* 🔹 Chọn vai trò */}
+          <div className="input-group">
+            <label>Chọn vai trò</label>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="student">Sinh viên</option>
+              <option value="teacher">Giảng viên</option>
+            </select>
+          </div>
+
+          {/* 🔹 Hiển thị ô nhập mã vai trò nếu là giảng viên */}
+          {role === "teacher" && (
+            <div className="input-group">
+              <label>Mã vai trò (Giảng viên)</label>
+              <input
+                type="text"
+                placeholder="Nhập mã vai trò..."
+                value={roleCode}
+                onChange={(e) => setRoleCode(e.target.value)}
+              />
+            </div>
+          )}
 
           <div className="input-group">
             <label>Mật khẩu</label>
@@ -87,21 +148,12 @@ function RegisterPage(props) {
             Đăng ký
           </button>
 
-          {/* <p className="note">
-            Bạn đã có tài khoản?{" "}
-            <Link to="/" className="link-btn">
-                Đăng nhập tại đây
-            </Link>
-          </p> */}
-
           <p className="note">
             Bạn đã có tài khoản?{" "}
             <button className="link-btn" onClick={props.onSwitch}>
-            {/* <button onClick={props.onSwitch}>Đăng nhập tại đây</button> */}
               Đăng nhập tại đây
             </button>
           </p>
-
         </form>
       </div>
     </div>

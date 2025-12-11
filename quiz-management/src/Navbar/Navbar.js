@@ -93,7 +93,6 @@ import React from 'react';
 import './Navbar.css';
 import { FaChevronDown } from "react-icons/fa";
 
-// ✅ Thêm prop onShowCreateExam
 const Navbar = ({
     onLogout,
     user,
@@ -151,7 +150,7 @@ const Navbar = ({
                                 </div>
                             )}
 
-                            {/* Dropdown Ngân hàng đề */}
+                            {/* Dropdown Ngân hàng đề chỉ còn Trắc nghiệm */}
                             {item.name === "Ngân hàng đề" && (
                                 <div className="dropdown-menu">
                                     <a
@@ -161,17 +160,10 @@ const Navbar = ({
                                     >
                                         Trắc nghiệm
                                     </a>
-                                    <a
-                                        href="#"
-                                        className="dropdown-item"
-                                        onClick={() => onShowExamBank("tuluan")}
-                                    >
-                                        Tự luận
-                                    </a>
                                 </div>
                             )}
 
-                            {/* ✅ Dropdown Tạo bài thi */}
+                            {/* Dropdown Tạo bài thi chỉ còn Trắc nghiệm */}
                             {item.name === "Tạo bài thi" && (
                                 <div className="dropdown-menu">
                                     <a
@@ -180,13 +172,6 @@ const Navbar = ({
                                         onClick={() => onShowCreateExam("tracnghiem")}
                                     >
                                         Trắc nghiệm
-                                    </a>
-                                    <a
-                                        href="#"
-                                        className="dropdown-item"
-                                        onClick={() => onShowCreateExam("tuluan")}
-                                    >
-                                        Tự luận
                                     </a>
                                 </div>
                             )}
@@ -207,4 +192,5 @@ const Navbar = ({
 };
 
 export default Navbar;
+
 

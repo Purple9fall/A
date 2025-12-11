@@ -1,61 +1,81 @@
 import React, { useState } from "react";
 import "./LoginPage.css";
-// import { Link } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa"; // icon user, cài react-icons nếu chưa có
-// npm install react-icons
+import { FaUserCircle } from "react-icons/fa";
 
 function LoginPage(props) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState(""); // đổi từ email
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // const handleLogin = (e) => {
-  //   e.preventDefault();
-  //   if (!email || !password) alert("Vui lòng nhập đầy đủ thông tin!");
-  //   else alert(`Đăng nhập thành công với tài khoản: ${email}`);
-  // };
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
+    if (!username || !password) {
       alert("Vui lòng nhập đầy đủ thông tin!");
       return;
     }
 
-    // ✅ Kiểm tra tài khoản mẫu
-    if (email === "admin@gmail.com" && password === "123456") {
-      alert(`Đăng nhập thành công với tài khoản: ${email}`);
-      const userData = { name: "Admin", email };
-      if (props.onLoginSuccess) props.onLoginSuccess(userData); // Gọi callback về App.js
-    } else {
-      alert("Sai email hoặc mật khẩu!");
+    try {
+      // Gọi API backend login
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message);
+        return;
+      }
+
+      // Lưu token, role, fullname vào localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("fullname", data.fullname);
+
+      alert(`Đăng nhập thành công! Role: ${data.role}`);
+
+      // Gọi callback về App.js nếu có
+      if (props.onLoginSuccess) {
+        props.onLoginSuccess({
+          fullname: data.fullname,
+          username,
+          role: data.role,
+        });
+      }
+
+      // Chuyển hướng theo role (cần props.navigate hoặc react-router)
+      if (props.navigate) {
+        if (data.role === "admin") props.navigate("/admin");
+        else if (data.role === "teacher") props.navigate("/teacher");
+        else props.navigate("/student");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi server, vui lòng thử lại");
     }
   };
 
-
-
   return (
     <div className="login-wrapper">
-      {/* Tiêu đề chính nằm ngoài card */}
-      <h1 className="main-title">
-        HỆ THỐNG THI TRẮC NGHIỆM TRỰC TUYẾN
-      </h1>
+      <h1 className="main-title">HỆ THỐNG THI TRẮC NGHIỆM TRỰC TUYẾN</h1>
 
       <div className="login-card">
-        {/* Icon thay cho chữ trên card */}
         <div className="card-icon">
           <FaUserCircle />
         </div>
 
         <form onSubmit={handleLogin} className="login-form">
           <div className="input-group">
-            <label>Email</label>
+            <label>Username</label>
             <input
-              type="email"
-              placeholder="Nhập email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Nhập username..."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
 
@@ -82,25 +102,16 @@ function LoginPage(props) {
           </button>
 
           <p className="note">
-            {/* Quên mật khẩu? <a href="#">Khôi phục tại đây</a> */}
-            Quên mật khẩu?<button className="link-btn">Khôi phục tại đây</button>
+            Quên mật khẩu?
+            <button className="link-btn">Khôi phục tại đây</button>
           </p>
-
-          {/* <p className="signup-note">
-            Chưa có tài khoản?{" "}
-            <Link to="/register" className="link-btn">
-                Đăng ký tại đây
-            </Link>
-          </p> */}
 
           <p className="signup-note">
             Chưa có tài khoản?{" "}
             <button className="link-btn" onClick={props.onSwitch}>
-            {/* <button onClick={props.onSwitch}>Đăng ký tại đây</button> */}
               Đăng ký tại đây
             </button>
           </p>
-
         </form>
       </div>
     </div>

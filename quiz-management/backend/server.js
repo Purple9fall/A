@@ -390,24 +390,247 @@
 // });
 
 
+// import express from "express";
+// import cors from "cors";
+// import db from "./db.js";
+// import { verifyToken, allowTeacherOrAdmin } from "./middlewares/authMiddleware.js";
+
+// const app = express();
+
+// // CORS
+// app.use(cors({
+//     origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//     credentials: true
+// }));
+
+// app.use(express.json());
+
+// // Log requests
+// app.use((req, res, next) => {
+//     console.log(`📨 ${new Date().toLocaleTimeString()} - ${req.method} ${req.url}`);
+//     console.log("Body:", req.body);
+//     next();
+// });
+
+// // ========================
+// // 🧪 Test endpoint
+// // ========================
+// app.get("/api/test", (req, res) => {
+//     res.json({ message: "Backend hoạt động!", time: new Date().toISOString() });
+// });
+
+// // ========================
+// // 📝 POST: Lưu đề thi
+// // ========================
+// app.post("/api/exams", (req, res) => {
+//     console.log("🎯 POST /api/exams");
+    
+//     const { title, duration, parts, questions, tags, description } = req.body;
+
+//     if (!title || !questions) {
+//         return res.status(400).json({ message: "Thiếu title hoặc questions" });
+//     }
+
+//     // Insert exam (tags đã là string "toán,lý")
+//     const sqlExam = `INSERT INTO exams (title, description, duration, parts, tags) VALUES (?, ?, ?, ?, ?)`;
+    
+//     db.query(sqlExam, [title, description || null, duration, parts, tags || null], (err, result) => {
+//         if (err) {
+//             console.error("❌ Database error:", err);
+//             return res.status(500).json({ message: "Lỗi server", error: err.message });
+//         }
+
+//         const examId = result.insertId;
+//         console.log("✅ Exam inserted, ID:", examId);
+
+//         let parsedQuestions;
+//         try {
+//             parsedQuestions = JSON.parse(questions);
+//         } catch (parseErr) {
+//             return res.status(400).json({ message: "questions không phải JSON hợp lệ" });
+//         }
+
+//         if (parsedQuestions.length === 0) {
+//             return res.status(201).json({ 
+//                 message: "Lưu thành công (không có câu hỏi)", 
+//                 examId, 
+//                 title 
+//             });
+//         }
+
+//         // Insert questions và answers
+//         parsedQuestions.forEach((q, index) => {
+//             const sqlQuestion = `INSERT INTO questions (exam_id, question_text, order_index) VALUES (?, ?, ?)`;
+            
+//             db.query(sqlQuestion, [examId, q.text, index], (err2, result2) => {
+//                 if (err2) {
+//                     console.error("❌ Insert question error:", err2);
+//                     return;
+//                 }
+
+//                 const questionId = result2.insertId;
+
+//                 if (q.answers && q.answers.length > 0) {
+//                     q.answers.forEach((a, aIndex) => {
+//                         const sqlAnswer = `INSERT INTO answers (question_id, answer_text, is_correct, order_index) VALUES (?, ?, ?, ?)`;
+//                         db.query(sqlAnswer, [questionId, a.text, a.isCorrect || false, aIndex], (err3) => {
+//                             if (err3) console.error("❌ Insert answer error:", err3);
+//                         });
+//                     });
+//                 }
+//             });
+//         });
+
+//         res.status(201).json({ 
+//             message: "Lưu đề thành công!", 
+//             examId, 
+//             title,
+//             totalQuestions: parsedQuestions.length
+//         });
+//     });
+// });
+
+// // ========================
+// // 📌 GET: Lấy danh sách đề
+// // ========================
+// app.get("/api/exams", (req, res) => {
+//     console.log("📋 GET /api/exams");
+    
+//     const sql = `
+//         SELECT 
+//             e.id,
+//             e.title,
+//             e.description,
+//             e.duration,
+//             e.parts,
+//             e.tags,
+//             e.created_at,
+//             COUNT(DISTINCT q.id) as questions
+//         FROM exams e
+//         LEFT JOIN questions q ON e.id = q.exam_id
+//         GROUP BY e.id
+//         ORDER BY e.created_at DESC
+//     `;
+
+//     db.query(sql, (err, results) => {
+//         if (err) {
+//             console.error("❌ Database error:", err);
+//             return res.status(500).json({ message: "Lỗi server", error: err.message });
+//         }
+
+//         console.log(`✅ Found ${results.length} exams`);
+        
+//         res.json({
+//             message: "Lấy danh sách thành công",
+//             total: results.length,
+//             data: results  // ✅ Trả về trong object data
+//         });
+//     });
+// });
+
+// // ========================
+// // 🗑️ DELETE: Xóa đề thi
+// // ========================
+// app.delete("/api/exams/:id", verifyToken, allowTeacherOrAdmin, (req, res) => {
+//     console.log("🗑️ DELETE /api/exams/" + req.params.id);
+//     console.log("👤 User:", req.user); // In ra thông tin user
+    
+//     const examId = req.params.id;
+
+//     if (!examId) {
+//         return res.status(400).json({ message: "Thiếu ID đề thi" });
+//     }
+
+//     // Xóa answers trước (vì có foreign key constraint)
+//     const sqlDeleteAnswers = `
+//         DELETE answers FROM answers
+//         INNER JOIN questions ON answers.question_id = questions.id
+//         WHERE questions.exam_id = ?
+//     `;
+
+//     db.query(sqlDeleteAnswers, [examId], (err1) => {
+//         if (err1) {
+//             console.error("❌ Error deleting answers:", err1);
+//             return res.status(500).json({ message: "Lỗi xóa câu trả lời", error: err1.message });
+//         }
+
+//         // Sau đó xóa questions
+//         const sqlDeleteQuestions = `DELETE FROM questions WHERE exam_id = ?`;
+        
+//         db.query(sqlDeleteQuestions, [examId], (err2) => {
+//             if (err2) {
+//                 console.error("❌ Error deleting questions:", err2);
+//                 return res.status(500).json({ message: "Lỗi xóa câu hỏi", error: err2.message });
+//             }
+
+//             // Cuối cùng xóa exam
+//             const sqlDeleteExam = `DELETE FROM exams WHERE id = ?`;
+            
+//             db.query(sqlDeleteExam, [examId], (err3, result) => {
+//                 if (err3) {
+//                     console.error("❌ Error deleting exam:", err3);
+//                     return res.status(500).json({ message: "Lỗi xóa đề thi", error: err3.message });
+//                 }
+
+//                 if (result.affectedRows === 0) {
+//                     return res.status(404).json({ message: "Không tìm thấy đề thi" });
+//                 }
+
+//                 console.log("✅ Exam deleted successfully, ID:", examId);
+//                 res.json({ 
+//                     message: "Xóa đề thi thành công!", 
+//                     examId 
+//                 });
+//             });
+//         });
+//     });
+// });
+
+// // 404 Handler
+// app.use((req, res) => {
+//     console.log(`❌ 404 - ${req.method} ${req.url}`);
+//     res.status(404).json({ message: "Route không tồn tại" });
+// });
+
+// // ========================
+// // 🚀 START SERVER
+// // ========================
+// const PORT = 5000;
+// app.listen(PORT, (err) => {
+//     if (err) {
+//         console.error("❌ Server start failed:", err);
+//         process.exit(1);
+//     }
+//     console.log(`🚀 Server running at http://localhost:${PORT}`);
+//     console.log(`📍 Test: http://localhost:${PORT}/api/test`);
+// });
+
 import express from "express";
 import cors from "cors";
 import db from "./db.js";
+import authRoutes from "./routes/auth.js";
 
 const app = express();
 
-// CORS
-app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true
-}));
+// ========================
+// 🌐 CORS
+// ========================
+app.use(
+    cors({
+        origin: ["http://localhost:3000", "http://127.0.0.1:3000"],
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        credentials: true,
+    })
+);
 
 app.use(express.json());
 
-// Log requests
+// ========================
+// 📜 Log mọi request
+// ========================
 app.use((req, res, next) => {
-    console.log(`📨 ${new Date().toLocaleTimeString()} - ${req.method} ${req.url}`);
+    console.log(`📨 ${req.method} ${req.url}`);
     console.log("Body:", req.body);
     next();
 });
@@ -419,83 +642,119 @@ app.get("/api/test", (req, res) => {
     res.json({ message: "Backend hoạt động!", time: new Date().toISOString() });
 });
 
+//Xác thực
+app.use("/api/auth", authRoutes);
+
 // ========================
 // 📝 POST: Lưu đề thi
 // ========================
 app.post("/api/exams", (req, res) => {
     console.log("🎯 POST /api/exams");
-    
+
     const { title, duration, parts, questions, tags, description } = req.body;
 
     if (!title || !questions) {
         return res.status(400).json({ message: "Thiếu title hoặc questions" });
     }
 
-    // Insert exam (tags đã là string "toán,lý")
-    const sqlExam = `INSERT INTO exams (title, description, duration, parts, tags) VALUES (?, ?, ?, ?, ?)`;
-    
-    db.query(sqlExam, [title, description || null, duration, parts, tags || null], (err, result) => {
-        if (err) {
-            console.error("❌ Database error:", err);
-            return res.status(500).json({ message: "Lỗi server", error: err.message });
-        }
+    const sqlExam = `
+        INSERT INTO exams (title, description, duration, parts, tags) 
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
-        const examId = result.insertId;
-        console.log("✅ Exam inserted, ID:", examId);
+    db.query(
+        sqlExam,
+        [title, description || null, duration, parts, tags || null],
+        (err, result) => {
+            if (err) {
+                console.error("❌ Database error:", err);
+                return res
+                    .status(500)
+                    .json({ message: "Lỗi server", error: err.message });
+            }
 
-        let parsedQuestions;
-        try {
-            parsedQuestions = JSON.parse(questions);
-        } catch (parseErr) {
-            return res.status(400).json({ message: "questions không phải JSON hợp lệ" });
-        }
+            const examId = result.insertId;
+            console.log("✅ Exam inserted, ID:", examId);
 
-        if (parsedQuestions.length === 0) {
-            return res.status(201).json({ 
-                message: "Lưu thành công (không có câu hỏi)", 
-                examId, 
-                title 
+            let parsedQuestions;
+            try {
+                parsedQuestions = JSON.parse(questions);
+            } catch (e) {
+                return res
+                    .status(400)
+                    .json({ message: "questions không phải JSON hợp lệ" });
+            }
+
+            if (parsedQuestions.length === 0) {
+                return res.status(201).json({
+                    message: "Lưu thành công (không có câu hỏi)",
+                    examId,
+                    title,
+                });
+            }
+
+            // Insert từng câu hỏi và đáp án
+            parsedQuestions.forEach((q, index) => {
+                const sqlQuestion = `
+                    INSERT INTO questions (exam_id, question_text, order_index)
+                    VALUES (?, ?, ?)
+                `;
+
+                db.query(
+                    sqlQuestion,
+                    [examId, q.text, index],
+                    (err2, result2) => {
+                        if (err2) {
+                            console.error("❌ Insert question error:", err2);
+                            return;
+                        }
+
+                        const questionId = result2.insertId;
+
+                        if (q.answers && q.answers.length > 0) {
+                            q.answers.forEach((a, aIndex) => {
+                                const sqlAnswer = `
+                                    INSERT INTO answers (question_id, answer_text, is_correct, order_index)
+                                    VALUES (?, ?, ?, ?)
+                                `;
+                                db.query(
+                                    sqlAnswer,
+                                    [
+                                        questionId,
+                                        a.text,
+                                        a.isCorrect || false,
+                                        aIndex,
+                                    ],
+                                    (err3) => {
+                                        if (err3)
+                                            console.error(
+                                                "❌ Insert answer error:",
+                                                err3
+                                            );
+                                    }
+                                );
+                            });
+                        }
+                    }
+                );
+            });
+
+            res.status(201).json({
+                message: "Lưu đề thành công!",
+                examId,
+                title,
+                totalQuestions: parsedQuestions.length,
             });
         }
-
-        // Insert questions và answers
-        parsedQuestions.forEach((q, index) => {
-            const sqlQuestion = `INSERT INTO questions (exam_id, question_text, order_index) VALUES (?, ?, ?)`;
-            
-            db.query(sqlQuestion, [examId, q.text, index], (err2, result2) => {
-                if (err2) {
-                    console.error("❌ Insert question error:", err2);
-                    return;
-                }
-
-                const questionId = result2.insertId;
-
-                if (q.answers && q.answers.length > 0) {
-                    q.answers.forEach((a, aIndex) => {
-                        const sqlAnswer = `INSERT INTO answers (question_id, answer_text, is_correct, order_index) VALUES (?, ?, ?, ?)`;
-                        db.query(sqlAnswer, [questionId, a.text, a.isCorrect || false, aIndex], (err3) => {
-                            if (err3) console.error("❌ Insert answer error:", err3);
-                        });
-                    });
-                }
-            });
-        });
-
-        res.status(201).json({ 
-            message: "Lưu đề thành công!", 
-            examId, 
-            title,
-            totalQuestions: parsedQuestions.length
-        });
-    });
+    );
 });
 
 // ========================
-// 📌 GET: Lấy danh sách đề
+// 📋 GET: Lấy danh sách đề thi
 // ========================
 app.get("/api/exams", (req, res) => {
     console.log("📋 GET /api/exams");
-    
+
     const sql = `
         SELECT 
             e.id,
@@ -505,7 +764,7 @@ app.get("/api/exams", (req, res) => {
             e.parts,
             e.tags,
             e.created_at,
-            COUNT(DISTINCT q.id) as questions
+            COUNT(DISTINCT q.id) AS questions
         FROM exams e
         LEFT JOIN questions q ON e.id = q.exam_id
         GROUP BY e.id
@@ -515,20 +774,61 @@ app.get("/api/exams", (req, res) => {
     db.query(sql, (err, results) => {
         if (err) {
             console.error("❌ Database error:", err);
-            return res.status(500).json({ message: "Lỗi server", error: err.message });
+            return res
+                .status(500)
+                .json({ message: "Lỗi server", error: err.message });
         }
 
         console.log(`✅ Found ${results.length} exams`);
-        
+
         res.json({
             message: "Lấy danh sách thành công",
             total: results.length,
-            data: results  // ✅ Trả về trong object data
+            data: results,
         });
     });
 });
 
-// 404 Handler
+// ========================
+// 📌 GET: Lấy 1 đề theo ID
+// ========================
+app.get("/api/exams/:id", (req, res) => {
+    const examId = req.params.id;
+    console.log(`🔍 GET /api/exams/${examId}`);
+
+    const sqlExam = `SELECT * FROM exams WHERE id = ?`;
+    const sqlQuestions = `SELECT * FROM questions WHERE exam_id = ? ORDER BY order_index`;
+    const sqlAnswers = `SELECT * FROM answers WHERE question_id IN (SELECT id FROM questions WHERE exam_id = ?) ORDER BY order_index`;
+
+    db.query(sqlExam, [examId], (err, exam) => {
+        if (err) return res.status(500).json({ message: "Lỗi DB", error: err.message });
+
+        if (exam.length === 0) {
+            console.log("❌ Không tìm thấy đề thi ID:", examId);
+            return res.status(404).json({ message: "Không tìm thấy đề thi" });
+        }
+
+        db.query(sqlQuestions, [examId], (err2, questions) => {
+            if (err2) return res.status(500).json({ error: err2.message });
+
+            db.query(sqlAnswers, [examId], (err3, answers) => {
+                if (err3) return res.status(500).json({ error: err3.message });
+
+                console.log("✅ Trả về đầy đủ đề thi");
+                res.json({
+                    exam: exam[0],
+                    questions: questions,
+                    answers: answers
+                });
+            });
+        });
+    });
+});
+
+
+// ========================
+// ❌ 404 Handler
+// ========================
 app.use((req, res) => {
     console.log(`❌ 404 - ${req.method} ${req.url}`);
     res.status(404).json({ message: "Route không tồn tại" });
@@ -538,11 +838,6 @@ app.use((req, res) => {
 // 🚀 START SERVER
 // ========================
 const PORT = 5000;
-app.listen(PORT, (err) => {
-    if (err) {
-        console.error("❌ Server start failed:", err);
-        process.exit(1);
-    }
+app.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
-    console.log(`📍 Test: http://localhost:${PORT}/api/test`);
 });
