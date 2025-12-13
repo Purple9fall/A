@@ -1,7 +1,7 @@
 .exam-bank-page {
   background: #f5f7fb;
   min-height: 100vh;
-  padding-top: 80px; /* chừa chỗ cho navbar fixed */
+  padding-top: 80px;
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -24,7 +24,9 @@
   gap: 22px;
 }
 
-/* Card */
+/* ========================================
+   EXAM CARD
+   ======================================== */
 .exam-card {
   background: #fff;
   border: 1px solid #e6e8ef;
@@ -52,7 +54,9 @@
   margin-bottom: 12px;
 }
 
-/* meta line */
+/* ========================================
+   META INFO
+   ======================================== */
 .exam-meta-row {
   display: flex;
   align-items: center;
@@ -80,7 +84,9 @@
   margin-bottom: 10px;
 }
 
-/* tags */
+/* ========================================
+   TAGS
+   ======================================== */
 .exam-tags {
   display: flex;
   gap: 8px;
@@ -98,35 +104,639 @@
   border: 1px solid #d6e4ff;
 }
 
-/* footer button */
+/* ========================================
+   CARD FOOTER - Buttons Container
+   ======================================== */
 .exam-card-footer {
+  display: flex;
+  gap: 10px;
   padding: 12px 18px 16px;
+  border-top: 1px solid #e6e8ef;
+  margin-top: auto;
+}
+
+/* ========================================
+   ACTION BUTTONS - Chi tiết, Sửa, Xóa
+   ======================================== */
+.exam-detail-btn,
+.exam-edit-btn,
+.exam-delete-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .exam-detail-btn {
-  width: 100%;
-  border: 1.5px solid #3c69c9;
-  color: #3c69c9;
-  background: #fff;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
 }
 
 .exam-detail-btn:hover {
-  background: #f0f6ff;
-  box-shadow: 0 4px 10px rgba(60,105,201,.18);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-/* responsive */
+.exam-edit-btn {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+}
+
+.exam-edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+}
+
+.exam-delete-btn {
+  background: linear-gradient(135deg, #E85A4F 0%, #D62828 100%);
+  color: white;
+  border: none;
+}
+
+.exam-delete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(232, 90, 79, 0.4);
+}
+
+.exam-edit-btn:active,
+.exam-delete-btn:active {
+  transform: translateY(0);
+}
+
+/* ========================================
+   MODAL - Chỉnh sửa đề thi
+   ======================================== */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.edit-modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.edit-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  border-bottom: 2px solid #f0f0f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.edit-modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: white;
+  font-weight: 700;
+}
+
+.edit-modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 32px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.edit-modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* ========================================
+   FORM - Các trường nhập liệu
+   ======================================== */
+.edit-modal-form {
+  padding: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ========================================
+   FOOTER - Buttons trong modal
+   ======================================== */
+.edit-modal-footer {
+  display: flex;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f0f0;
+  margin-top: 20px;
+}
+
+.btn-cancel,
+.btn-save {
+  flex: 1;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.btn-cancel:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
 @media (max-width: 1200px) {
-  .exam-grid { grid-template-columns: repeat(3, 1fr); }
+  .exam-grid { 
+    grid-template-columns: repeat(3, 1fr); 
+  }
 }
+
 @media (max-width: 900px) {
-  .exam-grid { grid-template-columns: repeat(2, 1fr); }
+  .exam-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+  }
 }
+
+@media (max-width: 768px) {
+  .exam-grid { 
+    grid-template-columns: 1fr; 
+  }
+
+  .edit-modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .edit-modal-header {
+    padding: 16px;
+  }
+
+  .edit-modal-header h2 {
+    font-size: 20px;
+  }
+
+  .edit-modal-form {
+    padding: 16px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-card-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .exam-detail-btn,
+  .exam-edit-btn,
+  .exam-delete-btn {
+    width: 100%;
+  }
+}
+
 @media (max-width: 560px) {
-  .exam-grid { grid-template-columns: 1fr; }
+  .exam-grid { 
+    grid-template-columns: 1fr; 
+  }
+}
+
+/* ========================================
+   SCROLLBAR cho modal
+   ======================================== */
+.edit-modal-content::-webkit-scrollbar,
+.edit-modal-content-large::-webkit-scrollbar {
+  width: 8px;
+}
+
+.edit-modal-content::-webkit-scrollbar-track,
+.edit-modal-content-large::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 16px 16px 0;
+}
+
+.edit-modal-content::-webkit-scrollbar-thumb,
+.edit-modal-content-large::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+.edit-modal-content::-webkit-scrollbar-thumb:hover,
+.edit-modal-content-large::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
+}
+
+/* ========================================
+   MODAL LARGE - Chỉnh sửa nâng cao
+   ======================================== */
+.edit-modal-content-large {
+  background: white;
+  border-radius: 16px;
+  width: 95%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.edit-modal-body {
+  padding: 24px;
+  max-height: calc(90vh - 200px);
+  overflow-y: auto;
+}
+
+/* ========================================
+   EXAM INFO FORM
+   ======================================== */
+.exam-info-form {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.exam-info-form h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+/* ========================================
+   QUESTIONS SECTION
+   ======================================== */
+.questions-section {
+  margin-top: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.section-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* ========================================
+   QUESTION ITEM
+   ======================================== */
+.question-item {
+  background: white;
+  border: 2px solid #e6e8ef;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.question-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.question-number {
+  font-weight: 700;
+  color: #667eea;
+  font-size: 16px;
+}
+
+.question-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #f0f6ff;
+  color: #667eea;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background: #667eea;
+  color: white;
+}
+
+.btn-icon.btn-danger {
+  background: #ffe5e5;
+  color: #E85A4F;
+}
+
+.btn-icon.btn-danger:hover {
+  background: #E85A4F;
+  color: white;
+}
+
+.question-text {
+  color: #333;
+  line-height: 1.6;
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* ========================================
+   EDIT QUESTION FORM
+   ======================================== */
+.edit-question-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-save-small,
+.btn-cancel-small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-save-small {
+  background: #28a745;
+  color: white;
+}
+
+.btn-save-small:hover {
+  background: #218838;
+}
+
+.btn-cancel-small {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-cancel-small:hover {
+  background: #5a6268;
+}
+
+/* ========================================
+   ANSWERS LIST
+   ======================================== */
+.answers-list {
+  margin-top: 12px;
+  padding-left: 16px;
+}
+
+.answer-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.answer-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.answer-label {
+  font-weight: 600;
+  color: #667eea;
+  min-width: 24px;
+}
+
+.answer-input {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.btn-danger-small {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #ffe5e5;
+  color: #E85A4F;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-danger-small:hover {
+  background: #E85A4F;
+  color: white;
+}
+
+.btn-add-answer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: #f0f6ff;
+  color: #667eea;
+  border: 1px dashed #667eea;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-add-answer:hover {
+  background: #667eea;
+  color: white;
+  border-style: solid;
+}
+
+.btn-close {
+  width: 100%;
+  padding: 12px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-close:hover {
+  background: #5a6268;
 }

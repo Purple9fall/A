@@ -163,3 +163,319 @@
     box-shadow: 0 0 20px rgba(255, 0, 0, 1); 
   }
 }
+
+/* Thêm vào file DoExamPage.css hiện tại của bạn */
+
+/* ================================
+   Timer Floating - Đồng hồ góc phải
+   ================================ */
+.timer-floating {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.violation-badge {
+  background: rgba(239, 68, 68, 0.9);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-left: 10px;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ================================
+   Warning Banner - Cảnh báo vi phạm
+   ================================ */
+.warning-banner {
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+  animation: slideDown 0.5s ease-out;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================================
+   Result Card - Kết quả thi
+   ================================ */
+.result-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  margin: 50px auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.result-card h1 {
+  color: #1f2937;
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+
+.score-display {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+}
+
+.score-display h2 {
+  font-size: 36px;
+  margin: 0;
+}
+
+.percentage {
+  font-size: 20px;
+  opacity: 0.9;
+  margin-top: 10px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-item {
+  background: #f3f4f6;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-item .label {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.stat-item .value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.violation-details {
+  background: #fef2f2;
+  border: 2px solid #fee2e2;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.violation-details h3 {
+  color: #dc2626;
+  margin-bottom: 10px;
+}
+
+.violation-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.violation-details li {
+  padding: 5px 0;
+  color: #991b1b;
+  font-weight: 500;
+}
+
+.btn-home {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-home:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* ================================
+   Question Card - Cải thiện giao diện
+   ================================ */
+.question-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #667eea;
+  transition: transform 0.2s;
+}
+
+.question-card:hover {
+  transform: translateX(5px);
+}
+
+.question-text {
+  color: #1f2937;
+  font-size: 18px;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-item {
+  background: #f9fafb;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.choice-item:hover {
+  background: #f3f4f6;
+  border-color: #667eea;
+}
+
+.choice-item input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.choice-item span {
+  flex: 1;
+  color: #374151;
+  font-size: 16px;
+}
+
+/* ================================
+   Submit Button
+   ================================ */
+.submit-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 15px 50px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* ================================
+   Fullscreen Mode
+   ================================ */
+.do-exam-page:fullscreen {
+  background: #f9fafb;
+  overflow-y: auto;
+}
+
+.do-exam-page:fullscreen .timer-floating {
+  top: 20px;
+}
+
+/* ================================
+   Responsive
+   ================================ */
+@media (max-width: 768px) {
+  .timer-floating {
+    top: 70px;
+    right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .result-card {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .score-display h2 {
+    font-size: 28px;
+  }
+}
+
+/* ================================
+   Disable text selection khi thi
+   ================================ */
+.do-exam-container {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Cho phép select cho input radio */
+.choice-item input[type="radio"] {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
