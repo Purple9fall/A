@@ -184,13 +184,21 @@ function LoginPage(props) {
       //   }
       // }
 
-      // Lưu vào localStorage
+      // ✅ Xóa sạch phiên cũ trước khi set phiên mới
+      localStorage.removeItem("token");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("role");
+      localStorage.removeItem("fullname");
+
+// ✅ Lưu phiên mới (LUÔN ghi đè)
       localStorage.setItem("token", data.token);
       localStorage.setItem("userData", JSON.stringify(data.user));
-      
-      // Giữ lại format cũ để tương thích
+
+// (khuyên) Nếu còn code cũ đang dùng role/fullname thì vẫn set,
+// nhưng luôn lấy từ data.user để đồng bộ
       localStorage.setItem("role", data.user.role);
       localStorage.setItem("fullname", data.user.name);
+
 
       console.log("✅ Đã lưu token và userData vào localStorage");
 

@@ -873,7 +873,7 @@ const CreateExamTracNghiem = ({ onNavigateHome, ...props }) => {
   const [questions, setQuestions] = useState([]);
   const [step, setStep] = useState(1);
 
-  const token = localStorage.getItem("token");
+  
   const role = localStorage.getItem("role");
 
   // Chặn student truy cập
@@ -944,7 +944,7 @@ const CreateExamTracNghiem = ({ onNavigateHome, ...props }) => {
       questions: JSON.stringify(questions),
       tags: examInfo.tags.join(","),
     };
-
+    const token = localStorage.getItem("token");
     try {
       const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
 

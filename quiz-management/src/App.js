@@ -201,27 +201,33 @@ function App() {
   // 🔄 useEffect: Load user từ localStorage khi app khởi động
   // ================================
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    const savedUserData = localStorage.getItem('userData');
+  const savedToken = localStorage.getItem("token");
+  const savedUserData = localStorage.getItem("userData");
 
-    if (savedToken && savedUserData) {
-      try {
-        const userData = JSON.parse(savedUserData);
-        console.log('✅ Load user từ localStorage:', userData);
-        
-        setToken(savedToken);
-        setCurrentUser(userData);
-        setUserEmail(userData.email || userData.username);
-        setCurrentPage("home");
+  if (!savedToken || !savedUserData) {
+    setCurrentPage("login");
+    return;
+  }
 
-        // Verify token còn hợp lệ không
-        verifyToken(savedToken);
-      } catch (error) {
-        console.error('❌ Lỗi parse userData:', error);
-        handleLogout();
-      }
+  const verify = async () => {
+    const res = await fetch("http://localhost:5000/api/auth/verify", {
+      headers: { Authorization: `Bearer ${savedToken}` }
+    });
+
+    if (!res.ok) {
+      handleLogout();        // token sai → logout
+    } else {
+      const userData = JSON.parse(savedUserData);
+      setToken(savedToken);
+      setCurrentUser(userData);
+      setUserEmail(userData.email || userData.username);
+      setCurrentPage("home"); // ✅ chỉ set khi token OK
     }
-  }, []);
+  };
+
+  verify();
+}, []);
+
 
   // ================================
   // 🔐 Verify token với server

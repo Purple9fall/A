@@ -523,6 +523,19 @@ import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../Navbar/Navbar";
 import "./DoExamPage.css";
 
+const authFetch = (url, options = {}) => {
+  const token = localStorage.getItem("token");
+
+  return fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {}),
+    },
+  });
+};
+
 const DoExamPage = ({
   examId,
   onNavigateHome,
@@ -559,7 +572,13 @@ const DoExamPage = ({
   const heartbeatInterval = useRef(null);
 
   // 👤 THAY THẾ BẰNG USER THẬT TỪ AUTH
-  const userId = 3; // student1
+  const userData = JSON.parse(localStorage.getItem("userData") || "null");
+  const userId = userData?.id;   // ✅ ID thật của user đang login
+  if (!userId) {
+  alert("Bạn chưa đăng nhập hoặc phiên đã hết hạn!");
+  // tùy app: điều hướng về login/home
+}
+
 
   // ========================
   // 🔐 Lấy thông tin thiết bị
@@ -582,7 +601,7 @@ const DoExamPage = ({
     try {
       const deviceInfo = getDeviceInfo();
 
-      const response = await fetch("http://localhost:5000/api/exam-session/start", {
+      const response = await authFetch("http://localhost:5000/api/exam-session/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -628,7 +647,7 @@ const DoExamPage = ({
   const startHeartbeat = (sid) => {
     heartbeatInterval.current = setInterval(async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/exam-session/heartbeat", {
+        const response = await authFetch("http://localhost:5000/api/exam-session/heartbeat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sessionId: sid })
@@ -659,7 +678,7 @@ const DoExamPage = ({
     if (!sessionId || submitted) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/exam-session/violation", {
+      const response = await authFetch("http://localhost:5000/api/exam-session/violation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -689,9 +708,11 @@ const DoExamPage = ({
     const fetchExam = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5000/api/exams/${examId}`);
+        const res = await authFetch(`http://localhost:5000/api/exams/${examId}`);
 
-        if (!res.ok) throw new Error("Không tìm thấy đề thi");
+        if (res.status === 401) throw new Error("Bạn chưa đăng nhập hoặc token hết hạn");
+        if (res.status === 404) throw new Error("Không tìm thấy đề thi");
+        if (!res.ok) throw new Error("Lỗi server");
 
         const data = await res.json();
         setExamInfo(data.exam || {});
@@ -903,7 +924,7 @@ const DoExamPage = ({
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/exam-session/submit", {
+      const response = await authFetch("http://localhost:5000/api/exam-session/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

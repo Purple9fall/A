@@ -606,8 +606,11 @@ const ExamBankTracNghiem = ({
   };
 
   useEffect(() => {
+  if (localStorage.getItem("token")) {
     fetchExams();
-  }, []);
+  }
+}, []);
+
 
   // =========================
   // Xem chi tiết bài thi
@@ -620,29 +623,35 @@ const ExamBankTracNghiem = ({
   // Xóa đề thi
   // =========================
   const handleDelete = async (examId) => {
-    if (!window.confirm("⚠️ Bạn có chắc muốn xóa đề thi này?")) return;
+  if (!window.confirm("⚠️ Bạn có chắc muốn xóa đề thi này?")) return;
 
-    try {
-      const authToken = localStorage.getItem('token');
+  const authToken = localStorage.getItem("token");
+  if (!authToken) {
+    alert("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
+    if (onLogout) onLogout();
+    return;
+  }
 
-      const res = await fetch(`${apiUrl}/api/exams/${examId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,  // ⭐ Sử dụng token từ localStorage
-        },
-      });
+  try {
+    const res = await fetch(`${apiUrl}/api/exams/${examId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
 
-      alert(`✅ ${data.message}`);
-      fetchExams();
-    } catch (err) {
-      console.error("❌ Delete error:", err);
-      alert("❌ Lỗi khi xóa đề: " + err.message);
-    }
-  };
+    alert(`✅ ${data.message}`);
+    fetchExams();
+  } catch (err) {
+    console.error("❌ Delete error:", err);
+    alert("❌ Lỗi khi xóa đề: " + err.message);
+  }
+};
+
 
   // =========================
   // Mở modal chỉnh sửa
